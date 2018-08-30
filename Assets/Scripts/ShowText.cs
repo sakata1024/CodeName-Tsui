@@ -5,61 +5,88 @@ using UnityEngine.UI;
 
 public class ShowText : MonoBehaviour {
     public Text showText;
-	
-    public class Profile
+    public InputField nameField;
+    
+
+    public void CreateDown()
     {
-        public Info info;
-
-        [System.Serializable]
-        public class Info
-        {
-            public string seed;
-            public string version;
-        }
-    }
-
-    public class SendData
-    {
-        public string id;
-        public User user;
-
-        [System.Serializable]
-        public class User
-        {
-            public string name;
-            public int age;
-            public string email;
-            public bool result;
-
-            public User(string name, int age, string email, bool result)
+        UserAPI.CreateUser(nameField.text, (bool flag) => {
+            if (flag)
             {
-                this.name = name;
-                this.age = age;
-                this.email = email;
-                this.result = result;
+                Debug.Log("Create UserData!");
             }
-        }
-    }
-
-    public void ButtonDown()
-    {
-        JSONConnection.JSONGet((Profile n) =>
-        {
-            if (n != null)
+            else
             {
-                showText.text = n.info.seed;
+                Debug.Log("Create failed...");
             }
         });
     }
 
-    public void PostDown()
+    public void GetDown()
     {
-        SendData.User user = new SendData.User("taro", 19, "example@examp.com", false);
-        SendData profile = new SendData();
-        profile.id = "ghijkl";
-        profile.user = user;
-        JSONConnection.JSONPost(profile,() => {
-            showText.text = profile.user.name;
+        UserAPI.GetUser((UserAPI.UserData userData) => {
+            if(userData != null)
+            {
+                showText.text = JsonUtility.ToJson(userData);
+            }
+        });
+    }
+
+    public void UpdateDown()
+    {
+        UserAPI.ChangeUserName(nameField.text, (bool flag) =>
+        {
+            if (flag)
+            {
+                Debug.Log("Update UserData!");
+            }
+            else
+            {
+                Debug.Log("Update failed...");
+            }
+        });
+    }
+
+    public void DestroyDown()
+    {
+        UserAPI.DeleteUser((bool flag) =>
+        {
+            if (flag)
+            {
+                Debug.Log("Delete UserData!");
+            }
+            else
+            {
+                Debug.Log("Delete failed...");
+            }
+        });
+    }
+
+    public void AddDown()
+    {
+        PositionAPI.AddPosition((bool flag)=> {
+            if (flag)
+            {
+                Debug.Log("Add PositionData!");
+            }
+            else
+            {
+                Debug.Log("Add failed...");
+            }
+        });
+    }
+
+    public void DeleteDown()
+    {
+        PositionAPI.DeletePosition((bool flag)=> {
+            if (flag)
+            {
+                Debug.Log("Delete PositionData!");
+            }
+            else
+            {
+                Debug.Log("Delete failed...");
+            }
         });
     }
 }

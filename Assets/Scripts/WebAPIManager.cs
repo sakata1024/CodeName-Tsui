@@ -24,10 +24,10 @@ namespace APIConnection
         /// APIに対してGETする関数
         /// </summary>
         /// <param name="callback">json文字列を引数とするcallback関数</param>
-        internal static void APIGet(onComplete callback)
+        /*internal static void APIGet(onComplete callback)
         {
             monoBehaviour.StartCoroutine(APIGetCoroutine("https://randomuser.me/api/", callback));
-        }
+        }*/
 
         /// <summary>
         /// APIに対してGETする関数
@@ -36,7 +36,8 @@ namespace APIConnection
         /// <param name="callback">json文字列を引数とするcallback関数</param>
         internal static void APIGet(string uri, onComplete callback)
         {
-            monoBehaviour.StartCoroutine(APIGetCoroutine(uri, callback));
+            string url = "https://tsuinoshirushi-server.herokuapp.com/" + uri;
+            monoBehaviour.StartCoroutine(APIGetCoroutine(url, callback));
         }
 
         /// <summary>
@@ -69,6 +70,7 @@ namespace APIConnection
         /// <returns></returns>
         static IEnumerator APIGetCoroutine(string uri, onComplete callback)
         {
+            Debug.Log(uri);
             using (UnityWebRequest www = UnityWebRequest.Get(uri))
             {
                 www.SetRequestHeader("Content-Type", "application/json");
@@ -99,6 +101,7 @@ namespace APIConnection
         /// <returns></returns>
         static IEnumerator APIPostCoroutine(string json, string uri, onComplete callback)
         {
+            Debug.Log(uri);
             using (UnityWebRequest www = new UnityWebRequest(uri, "post"))
             {
                 byte[] bodyraw = Encoding.UTF8.GetBytes(json);
